@@ -3,7 +3,7 @@ const axios = require("axios");
 const Promise = require("bluebird");
 
 function getToken(host, key) {
-  const token = uuid();
+  const apiUserId = uuid();
   return Promise.resolve()
     .then(() => {
       // Only for sandbox
@@ -12,7 +12,7 @@ function getToken(host, key) {
         { providerCallbackHost: host },
         {
           headers: {
-            "X-Reference-Id": token,
+            "X-Reference-Id": apiUserId,
             "Content-Type": "application/json",
             "Ocp-Apim-Subscription-Key": key
           }
@@ -20,25 +20,25 @@ function getToken(host, key) {
       );
     })
     .then(() => {
-      return axios.post(
-        `https://ericssonbasicapi2.azure-api.net/v1_0/apiuser/${token}/apikey`,
-        {},
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Ocp-Apim-Subscription-Key": key
+      // Get API Secret
+      return axios
+        .post(
+          `https://ericssonbasicapi2.azure-api.net/v1_0/apiuser/${apiUserId}/apikey`,
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Ocp-Apim-Subscription-Key": key
+            }
           }
-        }
-      );
+        )
+        .then(response => response.data.apiKey);
     })
-    .tap(response => console.log(response.data))
-    .then(response => {
-      // Base64 Encode
-      const apiSecret = response.data.apiKey;
-      const apiKey = token;
-      return Buffer.from(`${apiKey}:${apiSecret}`).toString("base64");
+    .tap(secret => console.log({ secret }))
+    .then(apiSecret => {
+      return Buffer.from(`${apiUserId}:${apiSecret}`).toString("base64");
     })
-    .tap(console.log)
+    .tap(basicAuthToken => console.log({ basicAuthToken }))
     .then(basicAuthToken => {
       // Get oauth token
       return axios
