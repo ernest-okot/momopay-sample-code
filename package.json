@@ -2,8 +2,10 @@
   "name": "hello",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
+    "compile": "tsc -p tsconfig.json",
+    "clean": "rm -r lib",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,5 +14,10 @@
     "axios": "^0.18.0",
     "bluebird": "^3.5.3",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.24",
+    "@types/uuid": "^3.4.4",
+    "typescript": "^3.1.6"
   }
 }
