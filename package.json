@@ -1,5 +1,5 @@
 {
-  "name": "hello",
+  "name": "momoapi-nodejs",
   "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
@@ -13,6 +13,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bluebird": "^3.5.3",
+    "moment": "^2.22.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
